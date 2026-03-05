@@ -1,0 +1,18 @@
+4-Count employees in each department having more than 5 employees.
+
+
+SELECT DEPT_NAME,COUNT(*) AS DEPT_COUNT
+FROM EMPLOYEE
+GROUP BY DEPT_NAME
+HAVING COUNT(*) > 5;
+
+-------------------------------------------------------------------------
+SELECT * FROM
+(
+SELECT DEPT_NAME,
+COUNT(*) OVER(PARTITION BY DEPT_NAME) AS DEPT_COUNT
+FROM EMPLOYEE
+)t
+WHERE DEPT_COUNT > 5;
+------------------------------------------------------------------------------
+
