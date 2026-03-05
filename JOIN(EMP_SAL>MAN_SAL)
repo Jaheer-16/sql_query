@@ -1,0 +1,7 @@
+3. Retrieve employees who earn more than their manager.
+
+SELECT NAME,SALARY
+FROM EMPLOYEE E
+INNER JOIN MANAGER M
+ON E.M_ID=M.M_ID
+WHERE E.SALARY > M.SALARY;
