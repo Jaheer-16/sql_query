@@ -1,0 +1,17 @@
+2-Find duplicate records in a table.
+
+SELECT ID,COUNT(*) AS DUP_COUNT
+FROM CUSTOMER
+GROUP BY ID
+HAVING COUNT(*)>=2;
+
+---------------------------------------------------------------------------------------
+SELECT * FROM
+(
+SELECT ID,NAME
+  ROW_NUMBER() OVER(PARTITION BY ID ORDER BY NAME) AS DUPLICATE
+  FROM CUSTOMER
+  )t
+  WHERE DUPLICATE >1
+  
+  ---------------------------------------------------------------------------------
