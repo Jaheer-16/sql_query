@@ -1,0 +1,12 @@
+5. Find employees who joined in the last 6 months.
+
+
+SELECT id,employee,info_date
+FROM emp_table
+WHERE info_date >= DATEADD(month,-6,GETDATE())
+
+-->If today is 2026-03-06, then:
+
+DATEADD(month, -6, GETDATE()) → 2025-09-06
+
+The query returns employees whose info_date ≥ 2025-09-06.
