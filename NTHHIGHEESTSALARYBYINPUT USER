@@ -1,0 +1,29 @@
+INPUT BY USER
+
+CREATE FUNCTION dbo.GetNthHighestSalaryWithEmployees (@N INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT EMP_NAME, SALARY
+    FROM (
+        SELECT EMP_NAME, SALARY,
+               DENSE_RANK() OVER (ORDER BY SALARY DESC) AS rnk
+        FROM EMPLOYEE
+    ) t
+    WHERE rnk = @N
+);
+
+-----------------------------------------------------------------------------------------------------------
+SELECT DISTINCT SALARY
+FROM EMPLOYEE
+ORDER BY SALARY DESC
+OFFSET N-1 ROWS FETCH NEXT 1 ROW ONLY;
+--------------------------------------------------------------------------------------------------------------
+SELECT SALARY
+FROM (
+    SELECT SALARY, DENSE_RANK() OVER (ORDER BY SALARY DESC) AS rnk
+    FROM EMPLOYEE
+) t
+WHERE rnk = N;   -- Replace N with the rank you wanT
+-----------------------------------------------------------------------------------------------------
