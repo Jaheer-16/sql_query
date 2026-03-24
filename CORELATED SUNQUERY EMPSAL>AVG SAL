@@ -1,0 +1,9 @@
+#empsalary > avg(salary)
+SELECT e.employee_name,d.dept,e.salary
+FROM employee e JOIN
+department d ON e.eid=d.id
+WHERE(salary) >
+(
+SELECT AVG(SALARY) FROM employee
+WHERE eid=e.eid
+)
