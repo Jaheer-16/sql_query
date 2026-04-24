@@ -1,0 +1,16 @@
+Scenario: You have a monthly_revenue table with month (DATE) and revenue (DECIMAL).
+Question: Using a CTE, calculate the Month-over-Month (MoM) growth percentage for each month. 
+Answer:
+sql
+WITH RevenueLag AS (
+    SELECT 
+        month, 
+        revenue, 
+        LAG(revenue) OVER (ORDER BY month) as prev_month_revenue
+    FROM monthly_revenue
+)
+SELECT 
+    month, 
+    revenue, 
+    ROUND(((revenue - prev_month_revenue) / prev_month_revenue) * 100, 2) as mom_growth_pct
+FROM RevenueLag;
