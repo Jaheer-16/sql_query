@@ -1,0 +1,20 @@
+ Find all customers who have never placed an order (using NOT EXISTS)
+ 
+ SELECT c.cust_id,c.cust_name
+ FROM CUSTOMERS c
+ WHERE NOT EXISTS(
+   SELECT 1 FROM ORDERS o
+   WHERE o.cust_id=c.cust_id
+ )
+ 
+  OR
+  
+ WITH cte_customer AS
+  (
+   SELECT DISTINCT c.cust_id,c.cust_name
+   FROM customer c
+   LEFT JOIN orders o
+   ON c.cust_id=o.cust_id
+   WHERE o.cust_id IS NULL
+  )
+   SELECT * FROM cte_customer;
