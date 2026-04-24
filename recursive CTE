@@ -1,0 +1,22 @@
+WITH cte_emp AS (
+  -- Anchor: top-level managers
+  SELECT name,
+         employee_id,
+         manger_id,
+         1 AS level
+  FROM info_table
+  WHERE manger_id IS NULL
+  
+  UNION ALL
+  
+  -- Recursive part
+  SELECT i.name,
+         i.employee_id,
+         i.manger_id,
+         c.level + 1
+  FROM info_table AS i
+  INNER JOIN cte_emp AS c
+    ON i.manger_id = c.employee_id
+)
+SELECT *
+FROM cte_emp;
