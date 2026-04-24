@@ -1,0 +1,32 @@
+Find all employees whose salary is higher than the average salary of their respective department.
+
+WITH cte_emp AS
+(SELECT avg(salary) as avg_sal,deptid
+FROM employees
+GROUP BY deptid)
+SELECT emp_name,salary
+FROM employees
+JOIN cte_emp
+ON employees.deptid=cte_emp.deptid
+WHERE salary > avg_sal
+
+   (or)
+SELECT emp_name,salary,deptid
+FROM employees as e
+WHERE salary >
+(SELECT avg(salary)
+FROM employees as emp_avg
+WHERE e.deptid=emp_avg.deptid) 
+
+    (or)
+SELECT e.emp_name,e.deptid,e.salary,avg_table.avg_sal
+FROM employees as e
+JOIN
+(
+ SELECT deptid,avg(salary) as avg_sal
+ FROM employees
+ GROUP BY deptid
+)AS avg_table
+ON e.deptid=avg_table.deptid
+WHERE salary > avg_sal;
+--------------------------------------------------------------------------------------------------------
