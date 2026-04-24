@@ -1,0 +1,47 @@
+Find all orders that have a purchase amount higher than the average purchase amount
+ for that specific customer. 
+ 
+ 
+ 
+ SELECT c.customer_name,
+ c.cust_id,
+ o.cust_id,
+ o.amount
+ FROM customer c
+ JOIN orders o
+ ON c.cust_id=o.cust_id
+ WHERE o.amount > (
+  SELECT avg(o2.amount) as avg_amount
+  FROM orders o2
+  WHERE o2.cust_id=c.cust_id
+ )
+ 
+   OR 
+   
+ WITH cte_cust AS(
+  SELECT cust_id,avg(amount) as avg_amount
+  FROM orders
+  GROUP BY cust_id
+ )
+  SELECT c.customer_name,c.cust_id,o.amount,c1.avg_amount
+  FROM customer c
+  JOIN cte_cust c1
+  ON c.cust_id=c1.cust_id
+  JOIN orders o
+  ON o.cust_id=c.cust_id
+  WHERE o.amount >c1.avg_amount;
+  
+  OR
+
+
+SELECT c.customer_name,
+       c.cust_id,
+       o.order_id,
+       o.amount,
+       AVG(o.amount) OVER (PARTITION BY o.cust_id) AS avg_amount
+FROM customer c
+JOIN orders o
+  ON c.cust_id = o.cust_id
+WHERE o.amount > AVG(o.amount) OVER (PARTITION BY o.cust_id);
+-------------------------------------------------------------------------------------------------------------------------
+ 
