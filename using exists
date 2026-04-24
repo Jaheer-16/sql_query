@@ -1,0 +1,20 @@
+ Select all customers who have placed at least one order (using EXISTS with customers and orders tables)
+ 
+ SELECT c.cust_id,c.cust_name FROM
+ CUSTOMERS c
+ WHERE EXISTS
+ (
+   SELECT 1 FROM orders o
+   WHERE o.cust_id=c.cust_id
+ )
+ 
+  OR
+  
+  WITH cte_customer AS
+  (
+   SELECT DISTINCT cust_id,cust_name
+   FROM customer c
+   JOIN orders o
+   ON c.cust_id=o.cust_id
+  )
+   SELECT * FROM cte_customer;
