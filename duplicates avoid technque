@@ -1,0 +1,32 @@
+ Scenario: A sales table contains duplicate entries for transactions due to a pipeline glitch.
+Question: Write a query using a CTE and a window function to identify and return
+ only the latest record for each transaction_id. 
+ 
+ WITH cte_transaction AS
+ (
+   SELECT cust_name,cust_id,orderdate,
+   ROW_NUMBER() OVER(PARTITION BY transaction_id ORDER BY orderdate DESC) AS c
+   FROM table_details
+ )
+  SELECT * FROM cte_transaction
+  WHERE c=1;
+   
+   or
+WITH cte AS (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY transaction_id 
+               ORDER BY orderdate DESC
+           ) AS rn
+    FROM table_details
+)
+DELETE FROM cte
+WHERE rn > 1;
+ 
+ or
+   
+   --To check
+  SELECT cust_id,count(transaction_id)
+  FROM table_details
+  GROUP BY cust_id
+  HAVING count(transaction_id) > 1
