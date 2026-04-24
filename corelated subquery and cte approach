@@ -1,0 +1,24 @@
+List all products that are more expensive than the average price of products within their own category.
+
+SELECT p.product_name,p.category_id,p.price,p1.avg_price
+FROM products p
+WHERE price > ( SELECT avg(price) as avg_price
+ FROM products p1
+ WHERE p1.category_id=p.category_id
+)
+
+   OR
+   
+WITH cte_products AS (
+  
+  SELECT category_id,avg(price) as avg_price
+  FROM products
+  GROUP BY category_id
+)
+ SELECT p.product_name,p.category_id,p.price,p1.avg_price
+ FROM products p
+ JOIN cte_products p1 ON p.category_id=p1.category_id
+ WHERE price > avg_price
+
+
+  . It’s also more efficient than a correlated subquery because the average per category is computed once in the CTE, not repeatedly for each row.
