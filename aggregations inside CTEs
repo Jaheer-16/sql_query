@@ -14,3 +14,14 @@ WITH customer_order_counts AS (
 SELECT *
 FROM customer_order_counts
 WHERE total_orders>5;
+
+ or
+  
+  
+  SELECT cust_id,cust_name,
+	COUNT(order_id) AS T_ORDERS
+	FROM customers c 
+	LEFT JOIN orders o 
+	ON c.cust_id=o.cust_id
+	GROUP BY cust_id,cust_name
+	HAVING count(order_id) > 5
