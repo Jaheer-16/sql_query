@@ -1,0 +1,16 @@
+    aggregations inside CTEs
+
+ 
+ 
+WITH customer_order_counts AS (
+    SELECT c.cust_id,
+           c.cust_name,
+           COUNT(o.order_id) AS total_orders
+    FROM customers c
+    LEFT JOIN orders o
+      ON c.cust_id = o.cust_id
+    GROUP BY c.cust_id, c.cust_name
+)
+SELECT *
+FROM customer_order_counts
+WHERE total_orders>5;
