@@ -1,0 +1,14 @@
+
+ count of logins per employee in the last 7 days.
+SELECT COUNT(login_time),name
+FROM employee_details
+WHERE login_time BETWEEN DATEADD(DAY,-7,GETDATE()) AND GETDATE()
+GROUP BY name;
+   OR
+ 
+ 
+ SELECT name, COUNT(login_time) AS login_count
+FROM employee_details
+WHERE login_time BETWEEN DATEADD(DAY, -7, GETDATE()) AND GETDATE()
+GROUP BY name
+HAVING COUNT(login_time) > 3;
