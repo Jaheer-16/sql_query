@@ -1,0 +1,36 @@
+Find the longest consecutive streak of daily logins for 
+each user. 
+WITH login_dates AS ( 
+  SELECT user_id, login_date, 
+         login_date - ROW_NUMBER() 
+OVER (PARTITION BY user_id ORDER BY 
+login_date)  AS grp 
+  FROM user_logins 
+) 
+SELECT user_id, COUNT(*) AS streak_length, 
+MIN(login_date) AS start_date, MAX(login_date) AS 
+end_date 
+FROM login_dates 
+GROUP BY user_id, grp 
+
+  OR
+
+
+WITH cte_login AS (
+ SELECT user_id,login_date,
+ login_date-ROW_NUMBER() OVER(partition by user_id ORDER BY login_date) as grp
+ FROM user_table
+),
+ cte_streak AS(
+  SELECT 
+  user_id,	
+  COUNT(*) AS streak_length,
+  MIN(login_date) AS start_date,
+  MAX(login_date) AS end_date,
+  FROM cte_login
+  GROUP BY user_id,grp
+  )
+SELECT user_id,
+       MAX(streak_length) AS longest_streak
+FROM cte_streak
+GROUP BY user_id;
