@@ -1,0 +1,13 @@
+ FIND CUSTOMERS WHO ORDERD ON CONCECUTIVE DAYS
+ 
+ WITH cte_customers AS (
+    
+	SELECT user_id,user_name,order_date,
+	lag(order_date) OVER(PARTITION BY user_id ORDER BY order_date) as prev_date
+	FROM CUSTOMERS_TABLE	
+ )
+ 
+  SELECT DISTINCT user_id
+  FROM cte_customers
+  WHERE DATEDIFF(day,prev_date,order_date) =1;
+ 
