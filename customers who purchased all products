@@ -1,0 +1,18 @@
+ find customers who purchased all products
+
+SELECT c.cust_name
+FROM customers c
+JOIN orders o ON c.cust_id = o.cust_id
+GROUP BY c.cust_name
+HAVING COUNT(DISTINCT o.product_id) = (
+    SELECT COUNT(DISTINCT product_id)
+    FROM products
+);
+  
+  OR
+  
+  SELECT cust_name
+  FROM orders
+  GROUP BY cust_name
+  HAVING COUNT(DISTINCT product_id)=
+  (SELECT COUNT(*) AS TOTAL_PRODUCTS FROM PRODUCTS)
